@@ -40,7 +40,6 @@ import android.test.InstrumentationTestCase;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.SpannedString;
-
 import com.android.cts.stub.R;
 
 
@@ -136,7 +135,14 @@ public class CanvasTest extends InstrumentationTestCase {
         assertEquals(BITMAP_WIDTH, mCanvas.getWidth());
         assertEquals(31, mCanvas.getHeight());
     }
-
+    public void testGetMaximumBitmapHeight()
+    {
+        assertNotNull(mCanvas.getMaximumBitmapHeight());
+    }
+    public void testGetMaximumBitmapWidth()
+    {
+        assertNotNull(mCanvas.getMaximumBitmapWidth());
+    }
     public void testIsOpaque() {
         assertFalse(mCanvas.isOpaque());
     }
