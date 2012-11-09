@@ -33,6 +33,7 @@ import android.graphics.Xfermode;
 import android.os.Build;
 import android.test.AndroidTestCase;
 import android.text.SpannedString;
+import android.graphics.Rect;
 
 import java.util.Locale;
 
@@ -976,5 +977,13 @@ public class PaintTest extends AndroidTestCase {
         } catch (RuntimeException e) {
         }
     }
-
+    public void testGetTextBounds1()
+    {
+        final String Text = "test";
+        Paint p = new Paint();
+        Rect bounds = new Rect();
+        assertTrue(bounds.isEmpty());
+        p.getTextBounds(Text, 0, Text.length(), bounds);
+        assertFalse(bounds.isEmpty());
+     }
 }
