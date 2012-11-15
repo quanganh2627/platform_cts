@@ -986,4 +986,14 @@ public class PaintTest extends AndroidTestCase {
         p.getTextBounds(Text, 0, Text.length(), bounds);
         assertFalse(bounds.isEmpty());
      }
+
+    public void testGetTextBounds2()
+    {
+        char[] chars = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
+        Paint p = new Paint();
+        Rect bounds = new Rect();
+        assertTrue(bounds.isEmpty());
+        p.getTextBounds(chars, 0, 7, bounds);
+        assertFalse(bounds.isEmpty());
+    }
 }
