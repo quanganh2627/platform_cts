@@ -33,6 +33,9 @@ LOCAL_SDK_VERSION := current
 
 include $(BUILD_PACKAGE)
 
+# Bundle into ATF package
+ATF_TEST_PACKAGES += CtsVerifier
+
 # Builds and launches CTS Verifier on a device.
 .PHONY: cts-verifier
 cts-verifier: CtsVerifier adb
