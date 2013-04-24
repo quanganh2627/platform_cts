@@ -520,10 +520,20 @@ public class FileSystemPermissionTest extends AndroidTestCase {
     private static void tryFileRead(File f) {
         byte[] b = new byte[1024];
         try {
-            System.out.println("looking at " + f.getCanonicalPath());
+            String path = f.getCanonicalPath();
+            System.out.println("looking at " + path);
             FileInputStream fis = new FileInputStream(f);
-            while(fis.read(b) != -1) {
-                // throw away data
+
+            // Not all sysfs files are non-blocking.  This one is
+            // defined to block when there are active wakeup sources,
+            // like the adb connection driving the test!  Likewise the
+            // debugfs tracing/per_cpu/cpu*/trace_pipe files will
+            // block if that is mounted.
+            if(!path.equals("/sys/power/wakeup_count") &&
+               !path.endsWith("/trace_pipe")) {
+                while(fis.read(b) != -1) {
+                    // throw away data
+                }
             }
             fis.close();
         } catch (IOException e) {
