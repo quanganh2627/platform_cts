@@ -26,6 +26,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -64,10 +65,12 @@ public class OpenGlEsVersionTest
         assertEquals("Reported OpenGL ES version from ActivityManager differs from PackageManager",
                 reportedVersion, getVersionFromPackageManager(mActivity));
 
-        assertGlVersionString(1);
+        // GLES1 is incompatible, so test for that precisely.  In ES2
+        // mode, accept anything 2 or higher.
+        assertGlVersionStringExact(1);
         if (detectedVersion >= 2) {
             restartActivityWithClientVersion(2);
-            assertGlVersionString(2);
+            assertGlVersionStringOrHigher(2);
         }
     }
 
@@ -158,13 +161,26 @@ public class OpenGlEsVersionTest
 
     /**
      * Check that the version string has some form of "Open GL ES X.Y" in it where X is the major
-     * version and Y must be some digit.
+     * version and Y must be some digit.  Note that X must match exactly.
      */
-    private void assertGlVersionString(int majorVersion) throws InterruptedException {
+    private void assertGlVersionStringExact(int majorVersion) throws InterruptedException {
         String message = "OpenGL version string '" + mActivity.getVersionString()
-                + "' is not " + majorVersion + ".0+.";
+                + "' is not " + majorVersion + ".x.";
         assertTrue(message, Pattern.matches(".*OpenGL.*ES.*" + majorVersion + "\\.\\d.*",
                 mActivity.getVersionString()));
+    }
+
+    /**
+     * Check that the version string has some form of "Open GL ES X.Y"
+     * in it where X is equal to or greater than the major version and
+     * Y must be some decimal number.
+     */
+    private void assertGlVersionStringOrHigher(int majorVersion) throws InterruptedException {
+        String ver = mActivity.getVersionString();
+        Pattern p = Pattern.compile("OpenGL.*ES[^\\d]*(\\d+)\\.\\d+.*");
+        Matcher m = p.matcher(ver);
+        assertTrue("OpenGL version string '" + ver + "' is not " + majorVersion + ".0+.",
+                   m.matches() && Integer.parseInt(m.group(1)) >= majorVersion);
     }
 
     /** Restart {@link GLSurfaceViewStubActivity} with a specific client version. */
