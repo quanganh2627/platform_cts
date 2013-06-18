@@ -131,6 +131,8 @@ public class MediaStore_Audio_GenresTest extends InstrumentationTestCase {
             if (cursor != null) {
                 cursor.close();
             }
+            assertEquals(1, mContentResolver.delete(audioUri, null, null));
+            assertEquals(1, mContentResolver.delete(genreUri, null, null));
         }
     }
 }
