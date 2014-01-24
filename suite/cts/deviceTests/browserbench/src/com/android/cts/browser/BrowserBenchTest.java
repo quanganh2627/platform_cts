@@ -138,9 +138,9 @@ public class BrowserBenchTest extends CtsAndroidTestCase {
         mTypeFinal = typeFinal;
         mUnitFinal = unitFinal;
         mNumberRepeat = numberRepeat;
-        Uri uri = Uri.parse(url);
         for (mRunIndex = 0; mRunIndex < numberRepeat; mRunIndex++) {
             Log.i(TAG, mRunIndex + "-th round");
+            Uri uri = Uri.parse(url+"&round="+mRunIndex);
             mLatch = new CountDownLatch(1);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
