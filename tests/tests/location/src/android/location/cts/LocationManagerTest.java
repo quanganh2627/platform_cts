@@ -283,22 +283,29 @@ public class LocationManagerTest extends InstrumentationTestCase {
         assertEquals("Inconsistent NLP values", nlp, lmNlp);
 
         // Assert that isLocationProviderEnabled() values are consistent with the location mode
+        boolean hasGPS = false;
         switch (mode) {
             case Settings.Secure.LOCATION_MODE_OFF:
                 assertFalse("Bad GPS for mode " + mode, gps);
                 assertFalse("Bad NLP for mode " + mode, nlp);
                 break;
             case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
-                assertEquals("Bad GPS for mode " + mode, hasGpsFeature(), gps);
-                assertFalse("Bad NLP for mode " + mode, nlp);
+                hasGPS = hasGpsFeature();
+                if(true == hasGPS) {
+                    assertEquals("Bad GPS for mode " + mode, hasGPS, gps);
+                    assertFalse("Bad NLP for mode " + mode, nlp);
+                }
                 break;
             case Settings.Secure.LOCATION_MODE_BATTERY_SAVING:
                 assertFalse("Bad GPS for mode " + mode, gps);
                 assertTrue("Bad NLP for mode " + mode, nlp);
                 break;
             case Settings.Secure.LOCATION_MODE_HIGH_ACCURACY:
-                assertEquals("Bad GPS for mode " + mode, hasGpsFeature(), gps);
-                assertTrue("Bad NLP for mode " + mode, nlp);
+                hasGPS = hasGpsFeature();
+                if(true == hasGPS) {
+                    assertEquals("Bad GPS for mode " + mode, hasGPS, gps);
+                    assertTrue("Bad NLP for mode " + mode, nlp);
+                }
                 break;
         }
     }
